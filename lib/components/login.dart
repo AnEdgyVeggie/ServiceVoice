@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:service_voice/constants/colors.dart';
 
+import '../constants/forms.dart';
+
 class Login extends StatefulWidget {
   const Login ({ super.key });
 
@@ -30,20 +32,16 @@ class _LoginState extends State<Login> {
         
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: ListView(
             children: <Widget>[
 
               // EMAIL --------------------------
               Column(
                 children: <Widget>[
                   const Padding(
-                    padding: EdgeInsets.zero,
+                    padding: EdgeInsets.only(top: 60),
                     child: Text('Email',
-                    style: TextStyle(
-                    fontSize: 20,
-                      ),
+                    style: formLabel
                     ),
                   ),
                   Padding(
@@ -67,13 +65,11 @@ class _LoginState extends State<Login> {
                   const Padding(
                     padding: EdgeInsets.only(top: 60),
                     child: Text('Password',
-                        style: TextStyle(
-                        fontSize: 20,
-                      ), 
+                        style: formLabel 
                     ),
                   ),
                     Padding(
-                      padding: EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 10),
                       child: TextFormField(
                       textAlign: TextAlign.center,
                       controller: passControl,
