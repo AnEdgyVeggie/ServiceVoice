@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:service_voice/classes/user.dart';
 import 'package:service_voice/database/database_handler.dart';
-import 'package:sqflite/sqflite.dart';
 import '../constants/fonts.dart';
 import '../constants/regex.dart';
 
@@ -20,6 +19,7 @@ final _formKey = GlobalKey<FormState>();
 
 // Set the text editing controllers for the register flow
 TextEditingController
+userControl = TextEditingController(),
 emailControl = TextEditingController(),
 fNameControl = TextEditingController(),
 lNameControl = TextEditingController(),
@@ -44,9 +44,30 @@ confirmPassControl = TextEditingController();
           child:  ListView(
            children: <Widget>[
 
+            // USERNAME ================================
+            Padding(
+              padding: const EdgeInsets.only(top: 40, bottom: 40),
+              child: Column(
+                children: <Widget>[
+                  const Text('Username', 
+                  style: formLabel,
+                  ),
+                  TextFormField(
+                    controller: userControl,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please enter your email address";
+                      } return "Username works!";
+                    }
+                  )
+                ],
+              )
+            ),
+
+
             // FIRST NAME =============================
             Padding(
-              padding:const EdgeInsets.only(top: 40, bottom: 40),
+              padding:const EdgeInsets.only(bottom: 40),
               child: Column(
                 children: <Widget> [
                   const Text('First Name',
@@ -162,8 +183,9 @@ confirmPassControl = TextEditingController();
                     if (_formKey.currentState!.validate()) {
 
                     }
-                      User newUser = User(username: 'first user', firstName: fNameControl.text, lastName: lNameControl.text, email: emailControl.text, password: passControl.text);
+                      User newUser = User(username: userControl.text, firstName: fNameControl.text, lastName: lNameControl.text, email: emailControl.text, password: passControl.text);
                       await DatabaseHandler.addUser(newUser);
+                      // ignore: avoid_print
                       print('updated DB');
                     return;
                   },)

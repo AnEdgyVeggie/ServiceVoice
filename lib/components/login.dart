@@ -19,7 +19,7 @@ class _LoginState extends State<Login> {
   
   // set Text Editing controllers for the log-in flow
   TextEditingController 
-  emailControl = TextEditingController(),
+  userControl = TextEditingController(),
   passControl = TextEditingController();
 
   @override
@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
                 children: <Widget>[
                   const Padding(
                     padding: EdgeInsets.only(top: 60),
-                    child: Text('Email',
+                    child: Text('Username',
                     style: formLabel
                     ),
                   ),
@@ -50,7 +50,7 @@ class _LoginState extends State<Login> {
                     padding:  EdgeInsets.zero,
                     child: TextFormField(
                       textAlign: TextAlign.center,
-                      controller: emailControl,
+                      controller: userControl,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please Enter your email.';
@@ -94,18 +94,21 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+
                       List<User>? users = await DatabaseHandler.getAllUsers();
                       if (users == null) return;
 
                       for (int i = 0; i < users.length; i++) {
-                        print(users[i].toString());
-                        print(users.length);
+                        if (userControl.text == users[i].username && passControl.text == users[i].password) {
+                          moveToHome();
+                          return;
+                        } 
+                        invalidInfoError();
+                      
                       }
                       // Navigator.pushReplacementNamed(context, '/');
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please enter your email and password'))
-                      );
+                      enterInfoError();
                     }
                   },
                   child: const Text('Submit'),
@@ -130,6 +133,21 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
+    );
+  }
+
+  void moveToHome() {
+    Navigator.pushReplacementNamed(context, '/');
+  }
+
+  void invalidInfoError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('invalid username or password')));
+  }
+
+  void enterInfoError() {
+      ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please enter your username and password'))
     );
   }
 }

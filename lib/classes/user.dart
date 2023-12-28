@@ -12,12 +12,7 @@ class User {
   Image? profilePicture;
 
 
-  User({id, required username, required firstName, required lastName, required email, required password}) {
-    this.username = username;
-    this.firstName = firstName;
-    this.lastName = lastName!;
-    this.email = email;
-    this.password = password;
+  User({id, required this.username, required this.firstName, required this.lastName, required this.email, required this.password}) {
     globalID++;
   }
 
@@ -41,6 +36,6 @@ class User {
 
   @override
   String toString() {
-    return 'id: ${id} \nusername: ${username} \nname: ${firstName} ${lastName} \nemail: ${email}';
+    return 'id: $id \nusername: $username \nname: $firstName $lastName \nemail: $email';
   }
 }

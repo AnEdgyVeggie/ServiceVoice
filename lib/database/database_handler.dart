@@ -9,20 +9,22 @@ class DatabaseHandler {
   static Future<Database> _getDB() async {
     return openDatabase(join(await getDatabasesPath(), _dbname), 
     onCreate: (db, version) async => await db.execute( 
-    "create table users ( " + 
-    "id                  int             PRIMARY KEY," + 
-    "username         VARCHAR(255)       NOT NULL," + 
-    "first_name          VARCHAR(255)    NOT NULL," + 
-    "last_name           VARCHAR(255)," + 
-    "email               VARCHAR(255)    NOT NULL," + 
-    "password            VARCHAR(255)    NOT NULL," + 
+    // ignore: prefer_interpolation_to_compose_strings
+    "create table users ( " 
+    "id                  int             PRIMARY KEY," 
+    "username         VARCHAR(255)       NOT NULL," 
+    "first_name          VARCHAR(255)    NOT NULL,"
+    "last_name           VARCHAR(255)," 
+    "email               VARCHAR(255)    NOT NULL," 
+    "password            VARCHAR(255)    NOT NULL," 
     "profile_picture     blob            DEFAULT null)" 
     ), version: _version);
   }
 
 
   static Future<int> addUser(User newUser) async {
-    print('ADD: ' + newUser.toString());
+    // ignore: avoid_print
+    print('ADD:  $newUser.toString()');
     final db = await _getDB();
     return await db.insert("users", newUser.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
