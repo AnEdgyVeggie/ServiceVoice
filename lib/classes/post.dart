@@ -32,7 +32,7 @@ Widget build(BuildContext context) {
 
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Text(widget.author,
             style: const TextStyle(
               color: Colors.red

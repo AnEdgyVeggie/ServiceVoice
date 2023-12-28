@@ -1,5 +1,9 @@
+
 import 'package:flutter/material.dart';
-import '../constants/forms.dart';
+import 'package:service_voice/classes/user.dart';
+import 'package:service_voice/database/database_handler.dart';
+import 'package:sqflite/sqflite.dart';
+import '../constants/fonts.dart';
 import '../constants/regex.dart';
 
 
@@ -151,14 +155,16 @@ confirmPassControl = TextEditingController();
               ),
             ),
 
-
               Center(
                 child: ElevatedButton(
                   child: const Text("Submit"),
-                  onPressed: (){
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      return;
+
                     }
+                      User newUser = User(username: 'first user', firstName: fNameControl.text, lastName: lNameControl.text, email: emailControl.text, password: passControl.text);
+                      await DatabaseHandler.addUser(newUser);
+                      print('updated DB');
                     return;
                   },)
               ),

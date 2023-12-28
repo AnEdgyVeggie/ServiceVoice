@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'constants/colors.dart';
+// import 'constants/colors.dart';
+
 
 // pages 
 import 'components/home.dart';
@@ -17,13 +18,13 @@ class ServiceVoice extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: kLbackgroundColor
+        // scaffoldBackgroundColor: kLbackgroundColor
       ),
       initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
         '/register': (context) => const Register(),
-        '/':(context) => Homepage()
+        '/':(context) => const Homepage()
       }
     );
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:service_voice/constants/colors.dart';
+import 'package:service_voice/database/database_handler.dart';
+import 'package:service_voice/classes/user.dart';
 
-import '../constants/forms.dart';
+import '../constants/fonts.dart';
 
 class Login extends StatefulWidget {
   const Login ({ super.key });
@@ -90,9 +92,16 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.only(top: 50),
               child: Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.pushReplacementNamed(context, '/');
+                      List<User>? users = await DatabaseHandler.getAllUsers();
+                      if (users == null) return;
+
+                      for (int i = 0; i < users.length; i++) {
+                        print(users[i].toString());
+                        print(users.length);
+                      }
+                      // Navigator.pushReplacementNamed(context, '/');
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Please enter your email and password'))
