@@ -1,51 +1,38 @@
-import 'package:flutter/material.dart';
+class Post {
 
+  late String id;
+  late String userID;
+  late String body;
+  late int likes;
+  List<String> comments = [];
 
-class Post extends StatefulWidget{
-  final String author, email, body;
-  final List<String> comments = <String>[];
-  final int likes = 0;
+  Post ({ required this.id, 
+  required this.userID, 
+  required this.body,
+  required this.likes, 
+  required comments });
 
-  Post({  required this.author, required this.email, required this.body, super.key, }) ;
+  // factory Post.fromJson(Map<String, dynamic> json) => Post(
+  //   id: json['id'],
+  //   username: json['username'],
+  //   body: json['body'],
+  //   likes: json['likes']
+  // );
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'userID': userID,
+    'body': body,
+    'likes': likes,
+    'comments': comments,
+  };
 
   @override
-  State<Post> createState() => _PostState();
-
-  void addComment(String comment) {
-    comments.add(comment);
+  String toString() {
+    return 'ID: ${id.toString()} \nUSER: $userID \n BODY: $body \nLIKES: ${likes.toString()}';
   }
 
+  setId(String newId) {
+    id = newId;
+  }
 }
-
-class _PostState extends State<Post> {
-
-
-@override
-Widget build(BuildContext context) {
-  return 
-  Card(
-    margin: const EdgeInsets.all(20),
-    child: Padding(
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: Text(widget.author,
-            style: const TextStyle(
-              color: Colors.red
-            ),
-          ),
-          ),
-          Text(widget.body,   
-          ),
-        ]
-      )
-    )
-  );
-}
-
-}
-

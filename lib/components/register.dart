@@ -181,14 +181,24 @@ confirmPassControl = TextEditingController();
                   child: const Text("Submit"),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-
-                    }
-                      User newUser = User(username: userControl.text, firstName: fNameControl.text, lastName: lNameControl.text, email: emailControl.text, password: passControl.text);
-                      await DatabaseHandler.addUser(newUser);
+                    
+                      User newUser = User(
+                        username: userControl.text,
+                        userid: '',
+                        firstName: fNameControl.text,
+                        lastName: lNameControl.text,
+                        email: emailControl.text,
+                        password: passControl.text,
+                        phoneNumber: null);
+                      DatabaseHandler db = DatabaseHandler();
+                      db.addUser(newUser);
+                          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                       // ignore: avoid_print
                       print('updated DB');
                     return;
-                  },)
+                    }
+                  },
+                )
               ),
            ]
           ),

@@ -1,56 +1,88 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/classes/user.dart';
+import '/classes/post.dart';
 
 class DatabaseHandler {
-  static const int _version = 1;
-  static const String _dbname = "service_voice.db";
 
-  static Future<Database> _getDB() async {
-    return openDatabase(join(await getDatabasesPath(), _dbname), 
-    onCreate: (db, version) async => await db.execute( 
-    // ignore: prefer_interpolation_to_compose_strings
-    "create table users ( " 
-    "id                  int             PRIMARY KEY," 
-    "username         VARCHAR(255)       NOT NULL," 
-    "first_name          VARCHAR(255)    NOT NULL,"
-    "last_name           VARCHAR(255)," 
-    "email               VARCHAR(255)    NOT NULL," 
-    "password            VARCHAR(255)    NOT NULL," 
-    "profile_picture     blob            DEFAULT null)" 
-    ), version: _version);
+  static var db = FirebaseFirestore.instance;
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  // USER FUNCTIONS ////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
+
+  addUser(User newUser) {
+    db.collection("users").add(newUser.toJson()).then((DocumentReference doc) =>
+    print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
+  static Future<List<User>?> getUsers() async {
+    List<User> users = [];
+    await db.collection('users').get().then((event) {
+      for (var doc in event.docs) {
+        String id = doc.id;
+        User newuser = User(
+          userid: id,
+          email: doc.data()['email'], 
+          username: doc.data()['username'],
+          firstName: doc.data()['first_name'],
+          lastName: doc.data()['last_name'],
+          phoneNumber: doc.data()['phone'],
+          password: doc.data()['password'],
+        );
+        newuser.setID(id);
+        users.add(newuser);
+      }
 
-  static Future<int> addUser(User newUser) async {
-    // ignore: avoid_print
-    print('ADD:  $newUser.toString()');
-    final db = await _getDB();
-    return await db.insert("users", newUser.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+    });
+    return users;
   }
 
-  static Future<int> updateUser(User updatedUser) async {
-    final db = await _getDB();
-    return await db.update("users", updatedUser.toJson(), 
-    where: 'id = ?', whereArgs: [updatedUser.id], conflictAlgorithm: ConflictAlgorithm.replace );
-  }
-
-  static Future<int> deleteUser(User deletedUser) async {
-    final db = await _getDB();
-    return await db.delete("users", where: 'id = ?', whereArgs: [deletedUser.id]);
-  }
-
-  static Future<List<User>?> getAllUsers() async {
-    final db = await _getDB();
-    final List<Map<String, dynamic>> maps = await db.query("users");
-
-    if (maps.isEmpty) {
-      return null;
-    } 
-    return List.generate(maps.length, (index) => User.fromJson(maps[index]));
-  }
-
-  static void deleteDatabases() {
-    deleteDatabase(_dbname);
+  static Future<User?> getSingleUser(User singleUser) async {
+    List<User>? users = await getUsers();
+    if (users == null ){
+      return null;      
     }
-}
+
+    for( User user in users) {
+      if (singleUser.userid == user.userid) {
+        // print('IN SINGLE USER DB: ${user.toString()}');
+        return user;
+      }
+    }
+    return null;
+  }
+
+
+  // addUser(User newUser) {
+  //   db.collection("users").add(newUser.toJson()).then((DocumentReference doc) =>
+  //   print('DocumentSnapshot added with ID: ${doc.id}'));
+  // }
+
+
+
+  ///////////////////////////////////////////////////////////////////////////////////////////
+  // POST FUNCTIONS ////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////
+
+
+  static addPost(Post newPost) {
+    db.collection("posts").add(newPost.toJson()).then((DocumentReference doc) =>
+    print('DocumentSnapshot added with ID: ${doc.id}'));
+  }
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // END OF CLASS
+
+

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '/main.dart';
 import 'package:service_voice/constants/colors.dart';
 import 'package:service_voice/database/database_handler.dart';
 import 'package:service_voice/classes/user.dart';
@@ -41,7 +42,7 @@ class _LoginState extends State<Login> {
               Column(
                 children: <Widget>[
                   const Padding(
-                    padding: EdgeInsets.only(top: 60),
+                    padding: EdgeInsets.only(top: 80),
                     child: Text('Username',
                     style: formLabel
                     ),
@@ -58,7 +59,7 @@ class _LoginState extends State<Login> {
                       },
                     ),
                   ),
-                ],
+                ], 
               ),
 
               // PASSWORD -----------------------
@@ -93,28 +94,44 @@ class _LoginState extends State<Login> {
               child: Center(
                 child: ElevatedButton(
                   onPressed: () async {
+                    int? errorCode;
                     if (_formKey.currentState!.validate()) {
-
-                      List<User>? users = await DatabaseHandler.getAllUsers();
-                      if (users == null) return;
-
+                      List<User>? users = await DatabaseHandler.getUsers();
+                      if (users == null) 
+                      {
+                        print('no users in array');
+                        return;
+                      }
                       for (int i = 0; i < users.length; i++) {
-                        if (userControl.text == users[i].username && passControl.text == users[i].password) {
+                        if (userControl.text.toLowerCase() == users[i].username.toLowerCase() && passControl.text == users[i].password) {
+                          User? user = await DatabaseHandler.getSingleUser(users[i]);
+                          if (user == null) {
+                            print('USER IS NULL');
+                            return;
+                          }
+                          ServiceVoice.setUser(user);
+                          print('USER ACCEPTED: \n${user.toString()}');
                           moveToHome();
                           return;
                         } 
-                        invalidInfoError();
-                      
+                          else  { 
+                            errorCode = 1;
+                            handleError(errorCode); 
+                          }   
                       }
-                      // Navigator.pushReplacementNamed(context, '/');
                     } else {
-                      enterInfoError();
+                      errorCode = 2;
+                      handleError(2);
                     }
+                    errorCode = null;
                   },
+
                   child: const Text('Submit'),
                   )
                 )
               ),
+
+              // REGISTRATION ===============================================
                Padding(
                 padding: const EdgeInsets.only(top: 100),
                 child: Center(
@@ -137,17 +154,24 @@ class _LoginState extends State<Login> {
   }
 
   void moveToHome() {
-    Navigator.pushReplacementNamed(context, '/');
+    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 
-  void invalidInfoError() {
-    ScaffoldMessenger.of(context).showSnackBar(
+
+  void handleError(int errorCode) {
+    print('hello');
+  switch (errorCode) {
+    case 1:
+      ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('invalid username or password')));
-  }
-
-  void enterInfoError() {
+      break;
+    case 2:
       ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Please enter your username and password'))
     );
+      break;
+    default: return;
   }
 }
+}
+
