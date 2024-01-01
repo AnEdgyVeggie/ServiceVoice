@@ -68,12 +68,13 @@ class _CreatePageState extends State<CreatePost> {
                     } 
                     String userID = widget.loggedInAs!.userid!;
                     String postBody = postControl.text;
-                    
-                    print(userID);
 
     
-                    Post newPost = Post(id: "", body: postBody, userID: userID, likes: 0, comments: []);
-                    DatabaseHandler.addPost(newPost);
+                    Post newPost = Post(id: "", body: postBody, userID: userID, likes: 0, comments: [], postDate: DateTime.now());
+                    if (DatabaseHandler.addPost(newPost, userID)) {
+                      postControl.text = "";
+                    }
+
                   },
                   child: const Text('Post',
                   )

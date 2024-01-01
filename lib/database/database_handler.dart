@@ -14,6 +14,14 @@ class DatabaseHandler {
     print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
+
+
+
+
+
+
+
+
   static Future<List<User>?> getUsers() async {
     List<User> users = [];
     await db.collection('users').get().then((event) {
@@ -36,14 +44,19 @@ class DatabaseHandler {
     return users;
   }
 
-  static Future<User?> getSingleUser(User singleUser) async {
+
+
+
+
+
+  static Future<User?> getSingleUser(String userID) async {
     List<User>? users = await getUsers();
     if (users == null ){
       return null;      
     }
 
     for( User user in users) {
-      if (singleUser.userid == user.userid) {
+      if (userID == user.userid) {
         // print('IN SINGLE USER DB: ${user.toString()}');
         return user;
       }
@@ -64,12 +77,39 @@ class DatabaseHandler {
   /////////////////////////////////////////////////////////////////////////////////////////
 
 
-  static addPost(Post newPost) {
-    db.collection("posts").add(newPost.toJson()).then((DocumentReference doc) =>
-    print('DocumentSnapshot added with ID: ${doc.id}'));
+  static bool addPost(Post newPost, String userID) {
+
+    db.collection("posts").add(newPost.toJson()).then((DocumentReference doc) => 
+    // updates users database to link posts to users
+    FirebaseFirestore.instance.collection("users").doc(userID).update(
+      {"posts_id": FieldValue.arrayUnion([doc.id])}));
+
+    return true;
   }
 
-  
+  static Future<List<Post>> getPostsForDisplay(String userID) async {
+      List<Post> posts = [];
+
+    await db.collection('posts').get().then((event) {
+      for (var doc in event.docs) {
+        if (doc.data()['user_id'] == userID) {
+          String postID = doc.id;
+          Post newPost = Post(
+            id: postID,
+            body: doc.data()['body'],
+            userID: doc.data()['user_id'],
+            comments: doc.data()['comments'],
+            likes: doc.data()['likes'],
+            postDate: doc.data()['post_date']
+          );
+          newPost.setId(postID);
+          posts.add(newPost);
+        }
+      }
+    });
+    posts.sort((a,b) => a.postDate.compareTo(b.postDate)); 
+    return posts;
+  }  
 
 
 

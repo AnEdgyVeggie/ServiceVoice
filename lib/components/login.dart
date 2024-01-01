@@ -104,7 +104,7 @@ class _LoginState extends State<Login> {
                       }
                       for (int i = 0; i < users.length; i++) {
                         if (userControl.text.toLowerCase() == users[i].username.toLowerCase() && passControl.text == users[i].password) {
-                          User? user = await DatabaseHandler.getSingleUser(users[i]);
+                          User? user = await DatabaseHandler.getSingleUser(users[i].userid!);
                           if (user == null) {
                             print('USER IS NULL');
                             return;

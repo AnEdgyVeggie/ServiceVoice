@@ -5,12 +5,16 @@ class Post {
   late String body;
   late int likes;
   List<String> comments = [];
+  DateTime postDate = DateTime.now();
 
-  Post ({ required this.id, 
-  required this.userID, 
-  required this.body,
-  required this.likes, 
-  required comments });
+  Post ({ 
+    required this.id, 
+    required this.userID, 
+    required this.body,
+    required this.likes, 
+    required comments,
+    required postDate
+  });
 
   // factory Post.fromJson(Map<String, dynamic> json) => Post(
   //   id: json['id'],
@@ -21,10 +25,11 @@ class Post {
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'userID': userID,
+    'user_id': userID,
     'body': body,
     'likes': likes,
     'comments': comments,
+    'post_date': postDate
   };
 
   @override
