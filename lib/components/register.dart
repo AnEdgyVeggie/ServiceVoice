@@ -57,7 +57,7 @@ confirmPassControl = TextEditingController();
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter your email address";
-                      } return "Username works!";
+                      } return null;
                     }
                   )
                 ],
@@ -80,7 +80,7 @@ confirmPassControl = TextEditingController();
                         return "Please enter your first name";
                       }
                       if (namesRegExp.hasMatch(value)) {
-                        return "first name works!";
+                        return null;
                       }
                       return 'Please enter a valid name (no numbers or special \ncharacters)';
                     },
@@ -104,7 +104,7 @@ confirmPassControl = TextEditingController();
                         return "Please enter your last name";
                       }
                       if (namesRegExp.hasMatch(value)) {
-                        return "Last name works!";
+                        return null;
                       }
                       return 'Please enter a valid name (no numbers or special \ncharacters)';
                     },
@@ -126,7 +126,7 @@ confirmPassControl = TextEditingController();
                         if (value == null || value.isEmpty) {
                           return "Please enter your email address";
                         } else if (emailRegExp.hasMatch(value)) {
-                          return 'Email works!';
+                          return null;
                         }
                         return 'Please enter a valid email address';
                       },
@@ -166,7 +166,7 @@ confirmPassControl = TextEditingController();
                           symbol = true;
                         }
                         if (lowercase == true && uppercase == true && number == true && symbol == true && value.length > 5) {
-                          return 'Password works';
+                          return null;
                         }
                       }
                       return 'Invalid password. Passwords must longer than 5 \ncharacters contain a lowercase, uppercase, \nnumber and special character';
@@ -189,12 +189,13 @@ confirmPassControl = TextEditingController();
                         lastName: lNameControl.text,
                         email: emailControl.text,
                         password: passControl.text,
-                        phoneNumber: null);
-                      DatabaseHandler db = DatabaseHandler();
-                      db.addUser(newUser);
-                          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                        phoneNumber: null,
+                        friends: [],
+                        posts: []);
+                      DatabaseHandler.addUser(newUser);
                       // ignore: avoid_print
                       print('updated DB');
+                      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                     return;
                     }
                   },

@@ -5,25 +5,19 @@ import '/classes/post.dart';
 class DatabaseHandler {
 
   static var db = FirebaseFirestore.instance;
+
+
   ///////////////////////////////////////////////////////////////////////////////////////////
   // USER FUNCTIONS ////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////
 
-  addUser(User newUser) {
-    db.collection("users").add(newUser.toJson()).then((DocumentReference doc) =>
-    print('DocumentSnapshot added with ID: ${doc.id}'));
+  static addUser(User newUser) {
+    db.collection("users").add(newUser.toJson());
   }
-
-
-
-
-
-
-
-
 
   static Future<List<User>?> getUsers() async {
     List<User> users = [];
+
     await db.collection('users').get().then((event) {
       for (var doc in event.docs) {
         String id = doc.id;
@@ -35,6 +29,8 @@ class DatabaseHandler {
           lastName: doc.data()['last_name'],
           phoneNumber: doc.data()['phone'],
           password: doc.data()['password'],
+          friends: doc.data()['friends'],
+          posts: doc.data()['posts_id']
         );
         newuser.setID(id);
         users.add(newuser);
@@ -43,11 +39,6 @@ class DatabaseHandler {
     });
     return users;
   }
-
-
-
-
-
 
   static Future<User?> getSingleUser(String userID) async {
     List<User>? users = await getUsers();
@@ -65,13 +56,6 @@ class DatabaseHandler {
   }
 
 
-  // addUser(User newUser) {
-  //   db.collection("users").add(newUser.toJson()).then((DocumentReference doc) =>
-  //   print('DocumentSnapshot added with ID: ${doc.id}'));
-  // }
-
-
-
   ///////////////////////////////////////////////////////////////////////////////////////////
   // POST FUNCTIONS ////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////
@@ -87,12 +71,25 @@ class DatabaseHandler {
     return true;
   }
 
-  static Future<List<Post>> getPostsForDisplay(String userID) async {
-      List<Post> posts = [];
+  static Future<List<Post>> getPostsForDisplay(String? userID) async {
+ 
+    List<Post> posts = [];
+    if (userID == null) return posts;
+
+    List<dynamic> ids = [];
+
+
+
+    await db.collection('users').doc(userID).get().then((event) {
+      ids = event['friends'];
+    });
+    ids.add(userID);
+    print('FRIENDS $ids');
 
     await db.collection('posts').get().then((event) {
+        for (var id in ids){
       for (var doc in event.docs) {
-        if (doc.data()['user_id'] == userID) {
+        if (doc.data()['user_id'] == id) {
           String postID = doc.id;
           Post newPost = Post(
             id: postID,
@@ -104,6 +101,7 @@ class DatabaseHandler {
           );
           newPost.setId(postID);
           posts.add(newPost);
+        }
         }
       }
     });

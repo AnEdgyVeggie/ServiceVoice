@@ -9,7 +9,7 @@ import 'package:service_voice/classes/user.dart';
 import 'components/home.dart';
 import 'components/login.dart';
 import 'components/register.dart';
-import 'components/create-post.dart';
+import 'components/create_post.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +25,7 @@ class ServiceVoice extends StatelessWidget {
 
 static User user = User(userid: '', username: '', firstName: '',
                        lastName: '', email: '', password: '', 
-                       phoneNumber: ""
+                       phoneNumber: "", friends: [], posts: []
                        );
 
   const ServiceVoice({ super.key });

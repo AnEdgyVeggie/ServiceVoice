@@ -1,35 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Post {
 
   late String id;
   late String userID;
   late String body;
   late int likes;
-  List<String> comments = [];
-  DateTime postDate = DateTime.now();
+  late List<dynamic> comments;
+  late Timestamp postDate;
 
   Post ({ 
     required this.id, 
     required this.userID, 
     required this.body,
     required this.likes, 
-    required comments,
-    required postDate
+    required this.comments,
+    required this.postDate
   });
 
-  // factory Post.fromJson(Map<String, dynamic> json) => Post(
-  //   id: json['id'],
-  //   username: json['username'],
-  //   body: json['body'],
-  //   likes: json['likes']
-  // );
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'user_id': userID,
     'body': body,
     'likes': likes,
-    'comments': comments,
-    'post_date': postDate
+    'comments': [],
+    'post_date': Timestamp.now()
   };
 
   @override

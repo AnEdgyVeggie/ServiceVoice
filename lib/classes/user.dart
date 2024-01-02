@@ -5,18 +5,18 @@ class User {
   String? userid;
   late String email;
   late String firstName;
-  List<int> friends = [];
+  late List<dynamic> friends;
   late String? lastName;
   late String password;
   late String? phoneNumber;
-  List<int> posts = [];
+  late List<dynamic>? posts;
   Image? profilePicture;
   late String username;
 
 
   User({ required userid, required this.username, required this.firstName, 
   required this.lastName, required this.email, 
-  required this.phoneNumber, required this.password, });
+  required this.phoneNumber, required this.password, required this.friends, required this.posts});
 
   // factory User.fromJson(Map<String, dynamic> json) => User(
     
@@ -34,8 +34,8 @@ class User {
     'email': email,
     'password': password,
     'phone': phoneNumber,
-    'friends': friends,
-    'posts': posts
+    'friends': [],
+    'posts': []
   };
 
   @override
@@ -46,7 +46,7 @@ class User {
             "email: $email\n"
             "password: $password\n"
             "friends: ${friends.length}\n"
-            "posts: ${posts.length}\n";
+            "posts: ${posts!.length}\n";
   }
 
   void setID(newId) {

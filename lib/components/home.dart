@@ -11,7 +11,7 @@ import '/classes/user.dart';
 import '/classes/post.dart';
 
 // COMPONENTS
-import '/components/bottom-nav-bar.dart';
+import 'bottom_nav_bar.dart';
 import '/components/post_display.dart';
 
 // // CONSTANTS =======================
@@ -20,18 +20,12 @@ import '/components/post_display.dart';
 
 class Homepage extends StatefulWidget {
 
-final User loggedInAs;
-late List<Post> posts;
+  final User loggedInAs;
 
+  const Homepage ({  super.key, required this.loggedInAs, });
 
-Homepage ({  super.key, required this.loggedInAs, });
-
-@override
-State<Homepage> createState() => _MyHomePageState();
-
-setPosts() async {
-  posts = await DatabaseHandler.getPostsForDisplay(loggedInAs.userid!);
-}
+  @override
+  State<Homepage> createState() => _MyHomePageState();
 
 }
 
@@ -42,11 +36,10 @@ class _MyHomePageState extends State<Homepage> {
 @override 
 Widget build(BuildContext context)  {
 
-widget.setPosts();
+final Future<List<Post>>posts = DatabaseHandler.getPostsForDisplay(widget.loggedInAs.userid);
 
-int postLimit = 10;
-List<Post> posts = [];
-
+// int postLimit = 10;
+// List<Post> posts = [];
   return Scaffold(
     appBar: AppBar(
       // backgroundColor: kappBarColor,
@@ -56,8 +49,7 @@ List<Post> posts = [];
       titleTextStyle: appBartitle
     ),
     body:   SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: ListView(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
@@ -71,15 +63,71 @@ List<Post> posts = [];
           const Padding(padding: EdgeInsets.zero,
             child:  Text("This is what's going on around you.",
             textAlign: TextAlign.center,),
-            ),
-          PostDisplay(post: widget.posts[0])
+          ),
+
+
+
+
+
+
+
+
+
+          FutureBuilder(future: posts, 
+          builder: (BuildContext context, AsyncSnapshot<List<Post>> snapshot) {
+            List<Widget> children;
+
+            if (snapshot.hasData && widget.loggedInAs.userid != null) {
+              int dataLength = snapshot.data!.length;
+                  children = <Widget> [
+                    
+                    for (int i = 0; i < dataLength; i++)
+                    PostDisplay(post: snapshot.data![i], username: widget.loggedInAs.username,)
+                  ];
+
+            } else if (snapshot.hasError) {
+              print('ERROR: ${snapshot.error}');
+              children = <Widget>[
+               const Text("An Error has occurred",
+                style:  TextStyle(color: Colors.red),
+                ),
+              ];
+            } else {
+              children = const <Widget> [
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: CircularProgressIndicator()
+                )
+              ];
+            }
+            return  Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: Column(
+                  children: children,
+                )
+              )
+            );
+
+          }
+          )
+
+
+
+
+
+
+
+
+
         ],
         )
       ),
 
       // BOTTOM NAV ============================
-     bottomNavigationBar: BottomNavBar(
-        
+     bottomNavigationBar:  BottomNavBar(
+        usedIndex: 0,
       ),
   );
   }

@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:service_voice/constants/fonts.dart';
 import 'package:service_voice/database/database_handler.dart';
-import '/components/bottom-nav-bar.dart';
+import 'bottom_nav_bar.dart';
 import '/classes/post.dart';
 import '/classes/user.dart';
 
@@ -9,7 +10,7 @@ class CreatePost extends StatefulWidget{
 
   final User? loggedInAs;
 
-  CreatePost({ super.key, required this.loggedInAs });
+  const CreatePost({ super.key, required this.loggedInAs });
 
 
   @override
@@ -55,7 +56,7 @@ class _CreatePageState extends State<CreatePost> {
                 ),
                 minLines: 15, 
                 maxLines: 30,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               ),
             ),
             Padding(
@@ -70,7 +71,7 @@ class _CreatePageState extends State<CreatePost> {
                     String postBody = postControl.text;
 
     
-                    Post newPost = Post(id: "", body: postBody, userID: userID, likes: 0, comments: [], postDate: DateTime.now());
+                    Post newPost = Post(id: "", body: postBody, userID: userID, likes: 0, comments: [], postDate: Timestamp.now());
                     if (DatabaseHandler.addPost(newPost, userID)) {
                       postControl.text = "";
                     }
@@ -84,9 +85,7 @@ class _CreatePageState extends State<CreatePost> {
           ],
       ),
 
-
-
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(usedIndex: 2),
     );
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:service_voice/constants/colors.dart';
+// import 'package:service_voice/constants/colors.dart';
 
 class BottomNavBar extends StatefulWidget {
+  final int usedIndex;
 
 
-  BottomNavBar({ super.key, });
+  BottomNavBar({ super.key, required this.usedIndex });
 
   @override
   State<BottomNavBar>  createState() => _BottomNavBarState();
@@ -16,9 +17,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
 @override
 Widget build(BuildContext context) {
   return BottomNavigationBar(
-    backgroundColor: Colors.amber,
-      selectedItemColor: selectedIconColor,
-      unselectedItemColor: unselectedIconColor,
+
+    selectedItemColor: Colors.white,
+    selectedLabelStyle: const TextStyle(
+      color: Colors.white
+    ),
+    unselectedItemColor: Colors.grey,
+    unselectedLabelStyle: const TextStyle(
+      color: Colors.grey
+    ),
+
+      currentIndex: widget.usedIndex,
         onTap: (index) {
           switch (index) {
             case 0:
@@ -31,7 +40,7 @@ Widget build(BuildContext context) {
                Navigator.pushNamedAndRemoveUntil(context, '/create-post', (route) => false);
               break;
             case 3:
-               Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+              Navigator.popAndPushNamed(context, '/login');
           }
         },
         enableFeedback: true,
