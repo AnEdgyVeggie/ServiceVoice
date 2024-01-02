@@ -4,6 +4,7 @@ class Post {
 
   late String id;
   late String userID;
+  late String username;
   late String body;
   late int likes;
   late List<dynamic> comments;
@@ -12,6 +13,7 @@ class Post {
   Post ({ 
     required this.id, 
     required this.userID, 
+    required this.username,
     required this.body,
     required this.likes, 
     required this.comments,
@@ -22,6 +24,7 @@ class Post {
   Map<String, dynamic> toJson() => {
     'id': id,
     'user_id': userID,
+    'username': username,
     'body': body,
     'likes': likes,
     'comments': [],

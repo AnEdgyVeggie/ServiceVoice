@@ -71,7 +71,7 @@ class _CreatePageState extends State<CreatePost> {
                     String postBody = postControl.text;
 
     
-                    Post newPost = Post(id: "", body: postBody, userID: userID, likes: 0, comments: [], postDate: Timestamp.now());
+                    Post newPost = Post(id: "", body: postBody, userID: userID, username: widget.loggedInAs!.username, likes: 0, comments: [], postDate: Timestamp.now());
                     if (DatabaseHandler.addPost(newPost, userID)) {
                       postControl.text = "";
                     }

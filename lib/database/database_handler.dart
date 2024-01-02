@@ -95,6 +95,7 @@ class DatabaseHandler {
             id: postID,
             body: doc.data()['body'],
             userID: doc.data()['user_id'],
+            username: doc.data()['username'],
             comments: doc.data()['comments'],
             likes: doc.data()['likes'],
             postDate: doc.data()['post_date']

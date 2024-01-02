@@ -4,9 +4,9 @@ import '/classes/post.dart';
 class PostDisplay extends StatefulWidget {
 
    final Post post;
-   final String username;
 
-  const PostDisplay({ super.key, required this.post, required this.username });
+
+  const PostDisplay({ super.key, required this.post });
 
   @override
   State<PostDisplay> createState() => _PostDisplayState();
@@ -49,7 +49,7 @@ class _PostDisplayState extends State<PostDisplay> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              widget.username,
+              widget.post.username,
               style: const TextStyle(
                 fontSize: 15,
 

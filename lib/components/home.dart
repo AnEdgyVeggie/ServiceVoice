@@ -82,7 +82,7 @@ final Future<List<Post>>posts = DatabaseHandler.getPostsForDisplay(widget.logged
                   children = <Widget> [
                     
                     for (int i = 0; i < dataLength; i++)
-                    PostDisplay(post: snapshot.data![i], username: widget.loggedInAs.username,)
+                    PostDisplay(post: snapshot.data![i],)
                   ];
 
             } else if (snapshot.hasError) {
