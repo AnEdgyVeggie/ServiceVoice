@@ -34,8 +34,9 @@ Widget build(BuildContext context) {
                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
               break;
             case 1:
-            // TO DO: ADD PROFILE
-              return;
+            // TO DO: ADD PROFILE'/profile-page'
+               Navigator.pushNamedAndRemoveUntil(context, '/profile-page', (route) => false);
+              break;
             case 2:
                Navigator.pushNamedAndRemoveUntil(context, '/create-post', (route) => false);
               break;

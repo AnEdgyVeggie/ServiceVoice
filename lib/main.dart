@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:service_voice/components/profile_page.dart';
 import 'constants/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -41,7 +42,8 @@ static User user = User(userid: '', username: '', firstName: '',
         '/login': (context) => const Login(),
         '/register': (context) => const Register(),
         '/':(context) =>  Homepage(loggedInAs: user,),
-        '/create-post':(context) =>  CreatePost(loggedInAs: user,)
+        '/create-post':(context) =>  CreatePost(loggedInAs: user,),
+        '/profile-page': (context) => ProfilePage(loggedInAs: user)
       }
     );
   }
